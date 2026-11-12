@@ -298,6 +298,26 @@ nav div{gap:2px!important;padding:6px!important}nav button em{font-size:10.5px!i
   <div class="gl"><h3 id="wt"></h3><div class="gls" id="wg"><b data-w="0"></b><b data-w="1"></b><b data-w="2"></b><b data-w="3"></b><b data-w="4"></b><b data-w="5"></b><b data-w="6"></b><b data-w="7"></b></div></div>
   <div class="gl"><h3 data-i="mood"></h3><div class="mo" id="mo"><b data-md="0">😞</b><b data-md="1">😐</b><b data-md="2">🙂</b><b data-md="3">😄</b><b data-md="4">🤩</b></div></div>
   <div class="gl"><h3 data-i="mot"></h3><p id="qt" style="margin:0 0 10px;font-size:15.5px"></p><button class="sm g" id="qn" data-i="newq"></button></div>
+  <section class="seo-intro" aria-labelledby="seo-main-title">
+  <div class="seo-intro-inner">
+    <h1 id="seo-main-title">STUDY PAGLA – Your Smart Study Companion</h1>
+    <p>
+      STUDY PAGLA helps students organize their learning and daily routines in one place.
+      Plan study sessions, build consistent habits, stay focused, keep track of Islamic
+      prayers, celebrate progress, and stay connected with friends.
+    </p>
+    <h2>Explore STUDY PAGLA Features</h2>
+    <ul class="seo-features">
+      <li><strong>📚 Study Planner</strong>Organize study tasks and make your learning routine easier to follow.</li>
+      <li><strong>⏱️ Focus Timer</strong>Structure focused study sessions and breaks.</li>
+      <li><strong>🎯 Habit Tracker</strong>Build positive daily habits and follow your progress.</li>
+      <li><strong>🕌 Islamic Prayer Tracker</strong>Keep a personal record of your daily prayer routine.</li>
+      <li><strong>🏆 Achievements</strong>Celebrate milestones and stay motivated as you make progress.</li>
+      <li><strong>🤝 Friends &amp; Messaging</strong>Connect with friends through friend requests and private messages.</li>
+    </ul>
+    <p class="seo-note">STUDY PAGLA is designed as a convenient study companion for mobile and web users.</p>
+  </div>
+</section>
  </div>
  <div class="pane" id="p-plan">
   <div class="gl"><div class="row" style="justify-content:space-between;margin-bottom:8px"><button class="sm g" id="cp">‹</button><h3 id="cm" style="margin:0"></h3><button class="sm g" id="cn">›</button></div><div class="cg" id="cw"></div><div class="cg" id="cg"></div><div id="ce"></div><div class="add"><input id="ci" data-p="evP"><button class="sm" id="cb" data-i="add"></button></div></div>
@@ -479,7 +499,23 @@ $("md").onclick=function(e){if(e.target===$("md")||e.target.closest("[data-x]"))
  else if(a==="blk"){S.blk[u]=1;delete S.fr[u];delete S.rq[u];S.inc=S.inc.filter(function(x){return x!==u});unmodal();toast(t("blkok"),"ok");appR()}
  else if(a==="rep")modal("<h3>"+t("rsT")+"</h3>"+[0,1,2,3].map(function(i){return'<button class="sm g" data-act="r" data-u="'+u+'" data-i="'+i+'">'+t("rs"+i)+"</button>"}).join(""));
  else if(a==="r"){REP.push({by:cur.user,u:u,r:+b.dataset.i});unmodal();toast(t("repok"),"ok")}};
-$("pf").onchange=function(e){var f=e.target.files[0];if(!f)return;if(f.size>2e6)return toast(t("big"),"err");var r=new FileReader();r.onload=function(){cur.pic=r.result;toast(t("pok"),"ok");appR()};r.readAsDataURL(f)};
+$("pf").onchange=async function(e){
+ var f=e.target.files&&e.target.files[0];if(!f)return;
+ if(f.size>2e6){toast(t("big"),"err");e.target.value="";return}
+ if(!cur||!cur.id){toast("আগে লগইন করো", "err");return}
+ try{
+  var data=await new Promise(function(resolve,reject){var rd=new FileReader();rd.onload=function(){var im=new Image();im.onload=function(){try{var c=document.createElement("canvas"),z=256,m=Math.min(im.width,im.height);c.width=c.height=z;c.getContext("2d").drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,z,z);c.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error("ছবি প্রস্তুত করা যায়নি"))},"image/jpeg",.82)}catch(err){reject(err)}};im.onerror=function(){reject(new Error("ছবি খোলা যায়নি"))};im.src=rd.result};rd.onerror=function(){reject(new Error("ফাইল পড়া যায়নি"))};rd.readAsDataURL(f)});
+  var sess=await supa.auth.getSession(),token=sess.data&&sess.data.session&&sess.data.session.access_token;
+  if(!token)throw new Error("লগইন সেশন পাওয়া যায়নি");
+  var objectPath=cur.id+"/avatar.jpg";
+  var up=await fetch(SBU+"/storage/v1/object/avatars/"+objectPath,{method:"POST",headers:{apikey:SBK,Authorization:"Bearer "+token,"Content-Type":"image/jpeg","x-upsert":"true"},body:data});
+  if(!up.ok){var ut=await up.text();throw new Error("Storage upload failed: "+ut.slice(0,160))}
+  var publicUrl=SBU+"/storage/v1/object/public/avatars/"+objectPath+"?v="+Date.now();
+  await sb("/profiles?id=eq."+encodeURIComponent(cur.id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({avatar_url:publicUrl})});
+  cur.pic=publicUrl;appR();toast(t("pok"),"ok");
+ }catch(err){console.error("Profile photo upload failed",err);toast("ছবি সেভ হয়নি: "+(err.message||"Storage/RLS সেটিংস পরীক্ষা করো"),"err")}
+ finally{e.target.value=""}
+};
 $("s-admin").onclick=function(e){var b=e.target.closest("button");if(!b||!b.dataset)return;var d=b.dataset;if(d.bn){var o=users.concat(DEMO).filter(function(x){return x.user===d.bn})[0];o.ban=!o.ban;admR()}else if(d.rs){REP.splice(+d.rs,1);admR()}else if(d.dd){sb("/developers?id=eq."+encodeURIComponent(d.dd),{method:"DELETE"}).then(admR).catch(function(){toast(t("msgFail"),"err")})}};
 $("ab").onclick=function(){var v=$("an").value.trim();if(!v)return toast(t("empty"),"err");NOTE.push(v);$("an").value="";toast(t("annok"),"ok")};
 $("b-out2").onclick=function(){cur=null;$("l-pass").value="";go("s-login")};
@@ -938,26 +974,7 @@ apply();
 </script>
 
 
-<section class="seo-intro" aria-labelledby="seo-main-title">
-  <div class="seo-intro-inner">
-    <h1 id="seo-main-title">STUDY PAGLA – Your Smart Study Companion</h1>
-    <p>
-      STUDY PAGLA helps students organize their learning and daily routines in one place.
-      Plan study sessions, build consistent habits, stay focused, keep track of Islamic
-      prayers, celebrate progress, and stay connected with friends.
-    </p>
-    <h2>Explore STUDY PAGLA Features</h2>
-    <ul class="seo-features">
-      <li><strong>📚 Study Planner</strong>Organize study tasks and make your learning routine easier to follow.</li>
-      <li><strong>⏱️ Focus Timer</strong>Structure focused study sessions and breaks.</li>
-      <li><strong>🎯 Habit Tracker</strong>Build positive daily habits and follow your progress.</li>
-      <li><strong>🕌 Islamic Prayer Tracker</strong>Keep a personal record of your daily prayer routine.</li>
-      <li><strong>🏆 Achievements</strong>Celebrate milestones and stay motivated as you make progress.</li>
-      <li><strong>🤝 Friends &amp; Messaging</strong>Connect with friends through friend requests and private messages.</li>
-    </ul>
-    <p class="seo-note">STUDY PAGLA is designed as a convenient study companion for mobile and web users.</p>
-  </div>
-</section>
+
 
 </body>
 </html>
