@@ -3,20 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>STUDY PAGLA - Your Smart Study Companion</title>
-<meta name="description" content="STUDY PAGLA is your smart study companion. Plan your study, track habits, manage daily routines and connect with friends.">
-<meta name="robots" content="index, follow">
+<title>STUDY PAGLA – Study Planner, Focus Timer & Habit Tracker</title>
+<meta name="description" content="STUDY PAGLA is a smart study companion. Plan study sessions, focus with a timer, track daily habits and Islamic prayers, celebrate achievements, and connect with friends.">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://ahsan3366habib-glitch.github.io/Sdudy-pagol/">
-<meta property="og:title" content="STUDY PAGLA">
-<meta property="og:description" content="Your Smart Study Companion">
+<meta property="og:locale" content="en_BD">
+<meta property="og:site_name" content="STUDY PAGLA">
+<meta property="og:title" content="STUDY PAGLA – Your Smart Study Companion">
+<meta property="og:description" content="Plan your studies, build better habits, track prayers, stay focused and connect with friends using STUDY PAGLA.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ahsan3366habib-glitch.github.io/Sdudy-pagol/">
 <meta property="og:image" content="https://ahsan3366habib-glitch.github.io/Sdudy-pagol/icon-512.png">
+<meta property="og:image:alt" content="STUDY PAGLA app icon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STUDY PAGLA – Your Smart Study Companion">
+<meta name="twitter:description" content="Plan studies, track habits and prayers, focus better, and connect with friends.">
+<meta name="twitter:image" content="https://ahsan3366habib-glitch.github.io/Sdudy-pagol/icon-512.png">
 <meta name="google-site-verification" content="h2cl2yEXseUtjTLfwtABZxloTqh7Fk7cWx89uQh2xQo">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#101827">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-192.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "STUDY PAGLA",
+  "url": "https://ahsan3366habib-glitch.github.io/Sdudy-pagol/",
+  "description": "A smart study companion for study planning, focus sessions, habit tracking, prayer tracking, achievements and connecting with friends.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Android, iOS, Windows, macOS, Linux"
+}
+</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Sora:wght@500;700;800&display=swap">
 <style>
 :root{--navy:#050d24;--navy2:#0b1e4a;--glow:#2f6bff;--white:#fff;--text:#eef3ff;--muted:rgba(238,243,255,.68);--glass:rgba(255,255,255,.09);--line:rgba(255,255,255,.2);--err:#ff7a8a;--ok:#6ee7b7;
@@ -204,6 +222,17 @@ nav button{position:relative}.bd{position:absolute;top:4px;right:calc(50% - 22px
 .noticebar{margin:0 0 14px;padding:11px 14px;border:1px solid rgba(143,177,255,.55);border-radius:16px;background:linear-gradient(110deg,rgba(47,107,255,.28),rgba(255,255,255,.08));box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:14px;line-height:1.45;overflow:hidden}
 .noticebar[hidden]{display:none}.noticebar .ntitle{font-weight:800;color:#bcd2ff;margin-right:8px;white-space:nowrap}.noticebar .nitem{display:block;padding:3px 0;overflow-wrap:anywhere}
 #invite-link{font-size:12px;padding:11px 12px;background:rgba(0,0,0,.18)}#na-list .rk{align-items:flex-start;gap:8px}#na-list .u{overflow-wrap:anywhere;min-width:0}#na-list .sm{flex:none}
+
+/* Public, crawlable homepage introduction */
+.seo-intro{position:relative;z-index:2;max-width:900px;margin:24px auto 40px;padding:26px 20px;color:#eef3ff;font-family:'Hind Siliguri',system-ui,sans-serif}
+.seo-intro-inner{padding:26px;border:1px solid rgba(255,255,255,.18);border-radius:22px;background:rgba(11,30,74,.82);box-shadow:0 12px 36px rgba(0,0,0,.2)}
+.seo-intro h1{margin:0 0 12px;font:800 clamp(25px,5vw,38px) 'Sora','Hind Siliguri',sans-serif;line-height:1.2;text-align:center}
+.seo-intro p{font-size:16px;line-height:1.75;color:rgba(238,243,255,.86)}
+.seo-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:20px 0 0;padding:0;list-style:none}
+.seo-features li{padding:14px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.06);line-height:1.6}
+.seo-features strong{display:block;color:#fff;font-size:16px}
+.seo-intro .seo-note{font-size:13px;color:rgba(238,243,255,.65);text-align:center;margin:20px 0 0}
+@media(max-width:520px){.seo-intro{padding:14px 12px;margin:14px auto 26px}.seo-intro-inner{padding:20px 16px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -221,10 +250,10 @@ nav div{gap:2px!important;padding:6px!important}nav button em{font-size:10.5px!i
 <div id="toasts" aria-live="polite"></div>
 <div class="wrap">
 
-<section class="screen on" id="s-splash"><div class="splash"><img data-logo alt="STUDY PAGLA"><div class="ld"><i></i></div></div></section>
+<section class="screen on" id="s-splash"><div class="splash"><img data-logo alt="STUDY PAGLA smart study companion logo"><div class="ld"><i></i></div></div></section>
 <section class="screen" id="s-lang">
  <div class="card">
-  <img class="lg" data-logo alt="STUDY PAGLA">
+  <img class="lg" data-logo alt="STUDY PAGLA smart study companion logo">
   <h2 style="text-align:center">ভাষা বেছে নাও</h2>
   <p class="sub" style="text-align:center">Choose your language</p>
   <div class="lang">
@@ -236,7 +265,7 @@ nav div{gap:2px!important;padding:6px!important}nav button em{font-size:10.5px!i
 </section>
 <section class="screen" id="s-login">
  <div class="card">
-    <img class="lg" data-logo alt="STUDY PAGLA">
+    <img class="lg" data-logo alt="STUDY PAGLA smart study companion logo">
   <p class="tag" data-i="tag"></p>
   <h2 data-i="loginT"></h2><p class="sub" data-i="loginS"></p>
   <div class="field"><label data-i="email"></label><div class="inp"><input id="l-email" type="text" autocomplete="username" data-p="idP"></div></div>
@@ -907,6 +936,28 @@ apply();
   };
 })();
 </script>
+
+
+<section class="seo-intro" aria-labelledby="seo-main-title">
+  <div class="seo-intro-inner">
+    <h1 id="seo-main-title">STUDY PAGLA – Your Smart Study Companion</h1>
+    <p>
+      STUDY PAGLA helps students organize their learning and daily routines in one place.
+      Plan study sessions, build consistent habits, stay focused, keep track of Islamic
+      prayers, celebrate progress, and stay connected with friends.
+    </p>
+    <h2>Explore STUDY PAGLA Features</h2>
+    <ul class="seo-features">
+      <li><strong>📚 Study Planner</strong>Organize study tasks and make your learning routine easier to follow.</li>
+      <li><strong>⏱️ Focus Timer</strong>Structure focused study sessions and breaks.</li>
+      <li><strong>🎯 Habit Tracker</strong>Build positive daily habits and follow your progress.</li>
+      <li><strong>🕌 Islamic Prayer Tracker</strong>Keep a personal record of your daily prayer routine.</li>
+      <li><strong>🏆 Achievements</strong>Celebrate milestones and stay motivated as you make progress.</li>
+      <li><strong>🤝 Friends &amp; Messaging</strong>Connect with friends through friend requests and private messages.</li>
+    </ul>
+    <p class="seo-note">STUDY PAGLA is designed as a convenient study companion for mobile and web users.</p>
+  </div>
+</section>
 
 </body>
 </html>
