@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ahsan3366habib-glitch.github.io/Sdudy-pagol/sitemap.xml
