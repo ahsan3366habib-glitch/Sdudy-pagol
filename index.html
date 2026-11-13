@@ -21,6 +21,7 @@
 <meta name="twitter:image" content="https://ahsan3366habib-glitch.github.io/Sdudy-pagol/icon-512.png">
 <meta name="google-site-verification" content="h2cl2yEXseUtjTLfwtABZxloTqh7Fk7cWx89uQh2xQo">
 <link rel="manifest" href="./manifest.json">
+<meta name="application-name" content="STUDY PAGLA">
 <meta name="theme-color" content="#101827">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-192.png">
@@ -914,7 +915,7 @@ apply();
       toast("Notification permission Allow করতে হবে", "err");
       return;
     }
-    var reg = await navigator.serviceWorker.register("./sw.js", {scope:"./"});
+    var reg = await navigator.serviceWorker.register("./sw.js", {scope:"./", updateViaCache:"none"});
     await navigator.serviceWorker.ready;
     var sub = await reg.pushManager.getSubscription();
     if (!sub) {
@@ -975,6 +976,58 @@ apply();
 
 
 
+
+
+<style>
+/* STUDY PAGLA Smart Schedule — glassmorphism */
+#sp-schedule{margin-top:14px;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.055));backdrop-filter:blur(28px) saturate(165%);-webkit-backdrop-filter:blur(28px) saturate(165%);border:1px solid rgba(255,255,255,.27);border-radius:24px;padding:17px;box-shadow:0 16px 42px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.3)}
+#sp-schedule .sp-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}#sp-schedule .sp-head h3{margin:0;font-size:19px}
+#sp-schedule .sp-tag{font-size:11px;padding:5px 9px;border-radius:99px;border:1px solid rgba(255,255,255,.25);background:rgba(120,160,255,.18);color:#dce8ff}
+#sp-schedule .sp-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}#sp-schedule .sp-field{min-width:0}#sp-schedule .sp-field.full{grid-column:1/-1}#sp-schedule label{font-size:12px;margin-bottom:5px}#sp-schedule input,#sp-schedule select{width:100%;min-width:0;padding:11px 10px;border-radius:13px;border:1px solid rgba(255,255,255,.22);background:rgba(5,13,36,.38);color:#fff;font:500 14px 'Hind Siliguri',sans-serif;color-scheme:dark}
+#sp-schedule .sp-save{grid-column:1/-1;width:100%;border:1px solid rgba(255,255,255,.45);border-radius:14px;padding:12px;background:linear-gradient(120deg,rgba(255,255,255,.95),rgba(190,211,255,.9));color:#07132f;font:700 15px 'Hind Siliguri',sans-serif;box-shadow:0 8px 24px rgba(60,110,255,.24)}
+#sp-schedule .sp-list{margin-top:16px}#sp-schedule .sp-item{padding:12px;margin:9px 0;border:1px solid rgba(255,255,255,.2);border-radius:17px;background:rgba(255,255,255,.075);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}#sp-schedule .sp-item.done{opacity:.58}#sp-schedule .sp-item.done .sp-title{text-decoration:line-through}#sp-schedule .sp-title{font-weight:700;font-size:15px}#sp-schedule .sp-meta{font-size:12px;color:rgba(238,243,255,.72);margin-top:3px}#sp-schedule .sp-actions{display:flex;gap:7px;margin-top:9px}#sp-schedule .sp-actions button{border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:7px 10px;background:rgba(255,255,255,.1);color:#fff;font:600 12px 'Hind Siliguri',sans-serif}#sp-schedule .sp-empty{padding:14px;text-align:center;color:rgba(238,243,255,.65);font-size:13px}
+@media(max-width:360px){#sp-schedule .sp-form{grid-template-columns:1fr}#sp-schedule .sp-field.full,#sp-schedule .sp-save{grid-column:auto}}
+</style>
+<script>
+(function(){
+  var host=document.getElementById('p-plan');if(!host||document.getElementById('sp-schedule'))return;
+  host.insertAdjacentHTML('beforeend',`<section id="sp-schedule" aria-label="Smart Study Schedule">
+    <div class="sp-head"><h3>🗓️ Smart Study Schedule</h3><span class="sp-tag">GLASS MODE</span></div>
+    <p class="sub" style="margin:0 0 13px">নিজের পড়ার সময় ঠিক করো — যেমন Biology 07:00–08:30</p>
+    <form id="sp-sch-form" class="sp-form">
+      <div class="sp-field full"><label for="sp-sch-title">কী পড়বে / কাজের নাম</label><input id="sp-sch-title" maxlength="120" required placeholder="যেমন: Biology — Chapter 3"></div>
+      <div class="sp-field"><label for="sp-sch-date">তারিখ</label><input id="sp-sch-date" type="date" required></div>
+      <div class="sp-field"><label for="sp-sch-repeat">পুনরাবৃত্তি</label><select id="sp-sch-repeat"><option value="none">একবার</option><option value="daily">প্রতিদিন</option><option value="weekly">প্রতি সপ্তাহে</option></select></div>
+      <div class="sp-field"><label for="sp-sch-start">শুরুর সময়</label><input id="sp-sch-start" type="time" required value="07:00"></div>
+      <div class="sp-field"><label for="sp-sch-end">শেষের সময়</label><input id="sp-sch-end" type="time" required value="08:30"></div>
+      <button class="sp-save" type="submit">＋ রুটিনে যোগ করো</button>
+    </form>
+    <div class="sp-list"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📚 তোমার রুটিন</h3><button class="sm g" id="sp-sch-refresh" type="button">↻ Refresh</button></div><div id="sp-sch-items"><div class="sp-empty">রুটিন লোড হচ্ছে…</div></div></div>
+    <p class="sub" style="font-size:11px;margin:10px 0 0">🔔 Server Scheduler সেটআপ সম্পন্ন হলে অ্যাপ বন্ধ থাকলেও নির্ধারিত সময়ে Push Notification আসবে।</p>
+  </section>`);
+  var $s=function(id){return document.getElementById(id)};
+  var today=new Date();$s('sp-sch-date').value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
+  var rows=[],loading=false;
+  function fmt(d){return new Date(d).toLocaleString('bn-BD',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}
+  function render(){var box=$s('sp-sch-items');if(!box)return;
+    if(!rows.length){box.innerHTML='<div class="sp-empty">এখনো কোনো রুটিন নেই। উপরে প্রথম রুটিনটি যোগ করো 🙂</div>';return;}
+    box.innerHTML=rows.map(function(x){var rep=x.repeat_rule==='daily'?'প্রতিদিন':x.repeat_rule==='weekly'?'প্রতি সপ্তাহে':'একবার';return '<article class="sp-item '+(x.completed?'done':'')+'"><div class="sp-title">'+esc(x.title)+'</div><div class="sp-meta">🕒 '+fmt(x.starts_at)+' — '+new Date(x.ends_at).toLocaleTimeString('bn-BD',{hour:'2-digit',minute:'2-digit'})+' · '+rep+'</div><div class="sp-actions"><button type="button" data-sp-done="'+x.id+'">'+(x.completed?'↩ আবার করব':'✓ সম্পন্ন')+'</button><button type="button" data-sp-del="'+x.id+'">🗑 মুছো</button></div></article>';}).join('');
+  }
+  async function load(){if(!cur||cur.admin)return;try{rows=await sb('/schedule_blocks?select=id,title,starts_at,ends_at,repeat_rule,completed&order=starts_at.asc&limit=100');render();checkReminders();}catch(e){$s('sp-sch-items').innerHTML='<div class="sp-empty">রুটিন লোড হয়নি: '+esc((e.message||'Database error').slice(0,120))+'<br>প্রয়োজনে Smart Schedule SQL একবার Run করো।</div>';}}
+  function localISO(date,time){return new Date(date+'T'+time+':00').toISOString();}
+  $s('sp-sch-form').addEventListener('submit',async function(e){e.preventDefault();if(!cur||cur.admin)return toast('আগে Student Account-এ Login করো','err');var title=$s('sp-sch-title').value.trim(),date=$s('sp-sch-date').value,st=$s('sp-sch-start').value,en=$s('sp-sch-end').value;if(!title||!date||!st||!en)return toast('সব তথ্য পূরণ করো','err');if(en<=st)return toast('শেষের সময় শুরুর সময়ের পরে হতে হবে','err');var starts=localISO(date,st),ends=localISO(date,en);try{await sb('/schedule_blocks',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({user_id:cur.id,title:title,starts_at:starts,ends_at:ends,repeat_rule:$s('sp-sch-repeat').value,timezone:(Intl.DateTimeFormat().resolvedOptions().timeZone||'Asia/Dhaka')})});$s('sp-sch-title').value='';toast('রুটিন যোগ হয়েছে 🎉','ok');await load();}catch(err){toast('সেভ হয়নি: '+(err.message||'Database error'),'err');}});
+  $s('sp-sch-items').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;var id=b.dataset.spDone||b.dataset.spDel;if(!id)return;try{if(b.dataset.spDone)await sb('/schedule_blocks?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({completed:!rows.find(function(x){return x.id===id;}).completed})});else if(b.dataset.spDel){if(!confirm('এই রুটিনটি মুছে ফেলবে?'))return;await sb('/schedule_blocks?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{Prefer:'return=minimal'}});}await load();}catch(err){toast('আপডেট হয়নি: '+(err.message||'Error'),'err');}});
+  $s('sp-sch-refresh').onclick=load;
+  function checkReminders(){if(!cur||cur.admin||!rows.length)return;var now=new Date();rows.forEach(function(x){if(x.completed)return;var start=new Date(x.starts_at),match=false,occurrence='';if(x.repeat_rule==='none'){match=Math.abs(now-start)<=45000;occurrence=x.starts_at;}else{var sameDay=x.repeat_rule==='daily'||now.getDay()===start.getDay();var at=new Date(now);at.setHours(start.getHours(),start.getMinutes(),0,0);match=sameDay&&Math.abs(now-at)<=45000;occurrence=now.toISOString().slice(0,10)+'T'+start.toTimeString().slice(0,5);}
+    if(match){if('Notification' in window&&Notification.permission==='granted')return;var key='sp_schedule_notified_'+cur.id+'_'+x.id+'_'+occurrence;try{if(localStorage.getItem(key))return;localStorage.setItem(key,'1');}catch(e){}if(window.spNote)spNote('📚 পড়ার সময় হয়েছে: '+x.title,'এখন তোমার নির্ধারিত পড়া শুরু করো');}
+  });}
+  var oldEnter=window.enterAuth; if(typeof oldEnter==='function')window.enterAuth=async function(u){var r=await oldEnter(u);if(cur&&!cur.admin)setTimeout(load,700);return r;};
+  var oldR=window.appR;if(typeof oldR==='function')window.appR=function(){oldR();if(cur&&!cur.admin&&document.getElementById('p-plan').classList.contains('on')&&!loading){loading=true;load().finally(function(){loading=false;});}};
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)checkReminders();});
+  setInterval(checkReminders,15000);
+  if(cur&&!cur.admin)setTimeout(load,1200);
+})();
+</script>
 
 </body>
 </html>
